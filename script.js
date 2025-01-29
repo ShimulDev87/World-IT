@@ -1,98 +1,84 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Handle Profile Editing
-    const profileForm = document.getElementById("profileForm");
-    profileForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+// Save profile data
+document.getElementById('profileForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const bio = document.getElementById('bio').value;
+    const profileImageInput = document.getElementById('profileImageInput').files[0];
 
-        // Get input values
-        const name = document.getElementById("name").value;
-        const bio = document.getElementById("bio").value;
-        const profileImageInput = document.getElementById("profileImageInput");
-        const profileImage = document.getElementById("profileImage");
+    // Save to Local Storage
+    localStorage.setItem('profileName', name);
+    localStorage.setItem('profileBio', bio);
 
-        // Update profile details
-        if (name) {
-            document.getElementById("profileName").textContent = name;
-        }
-        if (bio) {
-            document.getElementById("profileBio").textContent = bio;
-        }
-        if (profileImageInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                profileImage.src = e.target.result;
-            };
-            reader.readAsDataURL(profileImageInput.files[0]);
-        }
+    // Handle profile image (convert to base64 and save)
+    if (profileImageInput) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            localStorage.setItem('profileImage', e.target.result);
+            document.getElementById('profileImage').src = e.target.result;
+        };
+        reader.readAsDataURL(profileImageInput);
+    }
 
-        // Close the modal
-        const profileModal = bootstrap.Modal.getInstance(document.getElementById("editProfileModal"));
-        profileModal.hide();
-    });
+    // Update profile section
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileBio').textContent = bio;
 
-    // Handle Blog Post Creation
-    const postForm = document.getElementById("postForm");
-    postForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+});
 
-        // Get form values
-        const postTitle = document.getElementById("postTitle").value;
-        const content = document.getElementById("content").value;
-        const imageInput = document.getElementById("image");
-        const postsContainer = document.getElementById("posts");
+// Save blog posts
+document.getElementById('postForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const postTitle = document.getElementById('postTitle').value;
+    const content = document.getElementById('content').value;
+    const imageInput = document.getElementById('image').files[0];
 
-        // Create post elements
-        const postCard = document.createElement("div");
-        postCard.className = "card mb-3";
+    const post = {
+        title: postTitle,
+        content: content,
+        image: imageInput ? URL.createObjectURL(imageInput) : null,
+    };
 
-        let imageHTML = "";
-        if (imageInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                imageHTML = `<img src="${e.target.result}" class="card-img-top" alt="Post Image">`;
-                postCard.innerHTML = `
-                    ${imageHTML}
-                    <div class="card-body">
-                        <h5 class="card-title">${postTitle}</h5>
-                        <p class="card-text">${content}</p>
-                    </div>
-                `;
-            };
-            reader.readAsDataURL(imageInput.files[0]);
-        } else {
-            postCard.innerHTML = `
-                <div class="card-body">
-                    <h5 class="card-title">${postTitle}</h5>
-                    <p class="card-text">${content}</p>
-                </div>
-            `;
-        }
+    // Save to Local Storage
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
+    posts.push(post);
+    localStorage.setItem('posts', JSON.stringify(posts));
 
-        // Add post to the container
-        postsContainer.prepend(postCard);
+    // Display the new post
+    displayPost(post);
 
-        // Clear form fields
-        postForm.reset();
-    });
+    // Reset form
+    e.target.reset();
+});
 
-    // Handle Admin Login
-    const loginForm = document.getElementById("loginForm");
-    loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+// Display posts on page load
+function displayPost(post) {
+    const postsContainer = document.getElementById('posts');
+    const postElement = document.createElement('div');
+    postElement.className = 'card mb-3';
+    postElement.innerHTML = `
+        <div class="card-body">
+            <h5 class="card-title">${post.title}</h5>
+            ${post.image ? `<img src="${post.image}" class="img-fluid mb-3" alt="Post Image">` : ''}
+            <p class="card-text">${post.content}</p>
+        </div>
+    `;
+    postsContainer.appendChild(postElement);
+}
 
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+// Load saved data on page load
+window.addEventListener('load', function () {
+    // Load profile data
+    const profileName = localStorage.getItem('profileName');
+    const profileBio = localStorage.getItem('profileBio');
+    const profileImage = localStorage.getItem('profileImage');
 
-        // Placeholder validation (Replace with actual login logic)
-        if (username === "admin" && password === "password") {
-            alert("Login successful!");
-            const loginModal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
-            loginModal.hide();
-        } else {
-            alert("Invalid username or password.");
-        }
+    if (profileName) document.getElementById('profileName').textContent = profileName;
+    if (profileBio) document.getElementById('profileBio').textContent = profileBio;
+    if (profileImage) document.getElementById('profileImage').src = profileImage;
 
-        // Clear fields
-        loginForm.reset();
-    });
+    // Load blog posts
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+    posts.forEach(displayPost);
 });
