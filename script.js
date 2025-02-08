@@ -1,84 +1,74 @@
-// Save profile data
-document.getElementById('profileForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const bio = document.getElementById('bio').value;
-    const profileImageInput = document.getElementById('profileImageInput').files[0];
+document.getElementById('postForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    let title = document.getElementById('postTitle').value;
+    let content = document.getElementById('content').value;
+    let images = document.getElementById('image').files;
 
-    // Save to Local Storage
-    localStorage.setItem('profileName', name);
-    localStorage.setItem('profileBio', bio);
+    let postDiv = document.createElement('div');
+    postDiv.classList.add('blog-post');
+    postDiv.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
 
-    // Handle profile image (convert to base64 and save)
-    if (profileImageInput) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            localStorage.setItem('profileImage', e.target.result);
-            document.getElementById('profileImage').src = e.target.result;
-        };
-        reader.readAsDataURL(profileImageInput);
+    if (images.length > 0) {
+        let imageContainer = document.createElement('div');
+        for (let i = 0; i < images.length; i++) {
+            let img = document.createElement('img');
+            img.src = URL.createObjectURL(images[i]);
+            img.classList.add('img-fluid', 'rounded', 'mb-2');
+            img.style.maxWidth = '100%';
+            imageContainer.appendChild(img);
+        }
+        postDiv.appendChild(imageContainer);
     }
 
-    // Update profile section
-    document.getElementById('profileName').textContent = name;
-    document.getElementById('profileBio').textContent = bio;
-
-    // Close modal
-    bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+    document.getElementById('posts').prepend(postDiv);
+    document.getElementById('postForm').reset();
 });
+document.getElementById("postForm").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-// Save blog posts
-document.getElementById('postForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const postTitle = document.getElementById('postTitle').value;
-    const content = document.getElementById('content').value;
-    const imageInput = document.getElementById('image').files[0];
+    let title = document.getElementById("postTitle").value;
+    let content = document.getElementById("content").value;
+    let imageInput = document.getElementById("image");
 
-    const post = {
-        title: postTitle,
-        content: content,
-        image: imageInput ? URL.createObjectURL(imageInput) : null,
+    let reader = new FileReader();
+    reader.onload = function () {
+        let imageBase64 = reader.result; // Convert image to Base64
+        savePost(title, content, imageBase64);
     };
 
-    // Save to Local Storage
-    let posts = JSON.parse(localStorage.getItem('posts')) || [];
-    posts.push(post);
-    localStorage.setItem('posts', JSON.stringify(posts));
-
-    // Display the new post
-    displayPost(post);
-
-    // Reset form
-    e.target.reset();
+    if (imageInput.files.length > 0) {
+        reader.readAsDataURL(imageInput.files[0]); // Read file as Base64
+    } else {
+        savePost(title, content, ""); // Save without image
+    }
 });
 
-// Display posts on page load
-function displayPost(post) {
-    const postsContainer = document.getElementById('posts');
-    const postElement = document.createElement('div');
-    postElement.className = 'card mb-3';
-    postElement.innerHTML = `
-        <div class="card-body">
-            <h5 class="card-title">${post.title}</h5>
-            ${post.image ? `<img src="${post.image}" class="img-fluid mb-3" alt="Post Image">` : ''}
-            <p class="card-text">${post.content}</p>
-        </div>
-    `;
-    postsContainer.appendChild(postElement);
+function savePost(title, content, imageBase64) {
+    let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+    posts.push({ title, content, image: imageBase64 });
+    localStorage.setItem("blogPosts", JSON.stringify(posts));
+    displayPosts();
 }
 
-// Load saved data on page load
-window.addEventListener('load', function () {
-    // Load profile data
-    const profileName = localStorage.getItem('profileName');
-    const profileBio = localStorage.getItem('profileBio');
-    const profileImage = localStorage.getItem('profileImage');
+function displayPosts() {
+    let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+    let postsContainer = document.getElementById("posts");
+    postsContainer.innerHTML = "";
 
-    if (profileName) document.getElementById('profileName').textContent = profileName;
-    if (profileBio) document.getElementById('profileBio').textContent = profileBio;
-    if (profileImage) document.getElementById('profileImage').src = profileImage;
+    posts.forEach((post) => {
+        let postHTML = `
+            <div class="card my-3">
+                <div class="card-body">
+                    <h3>${post.title}</h3>
+                    <p>${post.content}</p>
+                    ${post.image ? `<img src="${post.image}" class="img-fluid" alt="Post Image">` : ""}
+                </div>
+            </div>
+        `;
+        postsContainer.innerHTML += postHTML;
+    });
+}
 
-    // Load blog posts
-    const posts = JSON.parse(localStorage.getItem('posts')) || [];
-    posts.forEach(displayPost);
-});
+// Load posts on page load
+document.addEventListener("DOMContentLoaded", displayPosts);
