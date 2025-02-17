@@ -32,3 +32,86 @@ h2 {
         font-size: 1.5rem;
     }
 }
+#tour div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; /* Space between images */
+    justify-items: center; /* Centers images */
+}
+
+#tour img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s; /* Smooth hover effect */
+}
+
+#tour img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+/* Background color & padding */
+#about {
+    background: linear-gradient(120deg, #1e3c72, #2a5298); /* Stylish gradient */
+    color: white; /* White text for high contrast */
+    padding: 50px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Text styling */
+#about h2 {
+    font-size: 2rem;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6); /* Text shadow for readability */
+}
+
+/* Wrap text inside a semi-transparent box */
+.text-box {
+    background: rgba(0, 0, 0, 0.6); /* Dark background for better readability */
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 80%;
+}
+
+/* Image section */
+.image-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* Image styling */
+.image-container img {
+    width: 220px; /* Set fixed width */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Cool hover effect */
+.image-container img:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+h2 {
+    text-shadow: 2px 2px 5px rgba(0, 225, 255, 0.589);
+}
+
