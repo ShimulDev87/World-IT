@@ -52,7 +52,7 @@ h2 {
 }
 /* Background color & padding */
 #about {
-    background: linear-gradient(120deg, #1e3c72, #2a5298); /* Stylish gradient */
+    background: linear-gradient(120deg, #1e3c72, #352a98); /* Stylish gradient */
     color: white; /* White text for high contrast */
     padding: 50px;
     border-radius: 10px;
