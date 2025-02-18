@@ -115,3 +115,170 @@ h2 {
     text-shadow: 2px 2px 5px rgba(0, 225, 255, 0.589);
 }
 
+/* Common Section Styling */
+section {
+    padding: 50px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    color: white;
+    text-align: center;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Background Gradient for Each Section */
+#education {
+    background: linear-gradient(120deg, #6a11cb, #2575fc); /* Purple-Blue */
+}
+
+#experience {
+    background: linear-gradient(120deg, #ff416c, #ff4b2b); /* Pink-Red */
+}
+
+#portfolio {
+    background: linear-gradient(120deg, #00c6ff, #0072ff); /* Light-Blue */
+}
+
+/* Text Shadow for Better Readability */
+h2 {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+    font-size: 2.2rem;
+}
+
+/* Fade-in Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover Effects */
+section:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Work Experience Text */
+.text-muted {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* Portfolio Image Grid */
+.portfolio-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* Portfolio Image Styling */
+.portfolio-container img {
+    width: 220px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Cool Hover Effect */
+.portfolio-container img:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.6);
+}
+/* Technical Articles Section *//* Technical Articles Section */
+#blog {
+    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+    padding: 50px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Blog Post Container */
+.blog-post {
+    background: white;
+    color: black;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+    animation: fadeInUp 0.7s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.blog-post:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Multiple Image Styling */
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.post-image {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.post-image:hover {
+    transform: scale(1.1);
+}
+/* Tour and Travel Section */
+#tour {
+    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+    padding: 50px;
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Image Gallery */
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    justify-content: center;
+}
+
+/* Individual Images */
+.image-gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover Effects */
+.image-gallery img:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Fade-in Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

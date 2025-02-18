@@ -72,3 +72,44 @@ function displayPosts() {
 
 // Load posts on page load
 document.addEventListener("DOMContentLoaded", displayPosts);
+document.getElementById("postForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const title = document.getElementById("postTitle").value;
+    const content = document.getElementById("content").value;
+    const images = document.getElementById("image").files;
+
+    if (!title || !content) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    const postContainer = document.createElement("div");
+    postContainer.classList.add("blog-post");
+
+    const postTitle = document.createElement("h3");
+    postTitle.innerText = title;
+
+    const postContent = document.createElement("p");
+    postContent.innerText = content;
+
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("image-container");
+
+    // Loop through uploaded images and add them to the post
+    for (let i = 0; i < images.length; i++) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(images[i]);
+        img.classList.add("post-image");
+        imageContainer.appendChild(img);
+    }
+
+    postContainer.appendChild(postTitle);
+    postContainer.appendChild(postContent);
+    postContainer.appendChild(imageContainer);
+
+    document.getElementById("posts").prepend(postContainer);
+
+    // Reset Form
+    document.getElementById("postForm").reset();
+});
