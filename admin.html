@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container my-5">
+        <h2>Admin Panel</h2>
+        <button onclick="logout()" class="btn btn-danger">Logout</button>
+
+        <h3 class="mt-4">Update Profile Section</h3>
+        <input type="text" id="adminProfileName" placeholder="Enter Name" class="form-control my-2">
+        <textarea id="adminProfileBio" class="form-control my-2" placeholder="Enter Bio"></textarea>
+        <button id="updateButton" onclick="updateProfile()" class="btn btn-success">Save Changes</button>
+        
+        <p id="statusMessage" class="text-success mt-2"></p>
+    </div>
+
+    <!-- ✅ FIXED: Correct Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // 🔥 Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeSBGO-W5oqiL_OPszP4KoFGZgD-a--to",
+            authDomain: "reaz-website.firebaseapp.com",
+            projectId: "reaz-website",
+            storageBucket: "reaz-website.appspot.com",
+            messagingSenderId: "629200438762",
+            appId: "1:629200438762:web:84f71667975d428317de93",
+            measurementId: "G-50HJKGH1D3"
+        };
+
+        // ✅ FIXED: Initialize Firebase (Using compat version)
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // 🟢 Check if User is Logged In (Redirect if Not)
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = "login.html";  // Redirect to login page if not authenticated
+            } else {
+                loadProfileData();  // Load profile only if logged in
+            }
+        });
+
+        // 🔴 Logout Function
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = "login.html"; // Redirect after logout
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        }
+
+        // 🟡 Load Existing Profile Data
+        function loadProfileData() {
+            db.collection("profile").doc("user").get().then((doc) => {
+                if (doc.exists) {
+                    document.getElementById("adminProfileName").value = doc.data().name || "";
+                    document.getElementById("adminProfileBio").value = doc.data().bio || "";
+                }
+            }).catch((error) => {
+                console.error("Error fetching profile:", error);
+            });
+        }
+
+        // ✍️ Update Profile Function
+        function updateProfile() {
+            const name = document.getElementById("adminProfileName").value;
+            const bio = document.getElementById("adminProfileBio").value;
+            const updateButton = document.getElementById("updateButton");
+            const statusMessage = document.getElementById("statusMessage");
+
+            if (!name.trim() || !bio.trim()) {
+                alert("Please fill out both fields.");
+                return;
+            }
+
+            updateButton.innerText = "Saving...";
+            updateButton.disabled = true;
+            statusMessage.innerText = "";
+
+            db.collection("profile").doc("user").set({ name, bio })
+                .then(() => {
+                    statusMessage.innerText = "✅ Profile Updated Successfully!";
+                    updateButton.innerText = "Save Changes";
+                    updateButton.disabled = false;
+                })
+                .catch((error) => {
+                    alert("Error updating profile: " + error.message);
+                    updateButton.innerText = "Save Changes";
+                    updateButton.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>

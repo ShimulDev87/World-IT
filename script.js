@@ -113,3 +113,37 @@ document.getElementById("postForm").addEventListener("submit", function (e) {
     // Reset Form
     document.getElementById("postForm").reset();
 });
+
+function loginAdmin() {
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            alert("Login successful!");
+            window.location.href = "admin.html"; // Redirect to admin panel
+        })
+        .catch((error) => {
+            alert("Login failed: " + error.message);
+        });
+}
+<script>
+    // Load Existing Data
+    db.collection("profile").doc("user").get().then((doc) => {
+        if (doc.exists) {
+            document.getElementById("adminProfileName").value = doc.data().name;
+            document.getElementById("adminProfileBio").value = doc.data().bio;
+        }
+    });
+
+    // Function to Update Data
+    function updateProfile() {
+        const name = document.getElementById("adminProfileName").value;
+        const bio = document.getElementById("adminProfileBio").value;
+
+        db.collection("profile").doc("user").set({ name, bio })
+            .then(() => { alert("Profile Updated!"); })
+            .catch((error) => { alert("Error: " + error.message); });
+    }
+</script>
+
