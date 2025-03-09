@@ -39,6 +39,12 @@
         <h3 class="mt-4">Profile Information</h3>
         <p><strong>Name:</strong> <span id="profileName">Loading...</span></p>
         <p><strong>Bio:</strong> <span id="profileBio">Loading...</span></p>
+
+        <div class="datetime">
+            <p id="time">Loading time...</p>
+            <p id="date">Loading date...</p>
+            <p id="timezone">Loading time zone...</p>
+        </div>
     </div>
 
     
@@ -168,7 +174,43 @@
     function goToAdminPanel() {
         window.location.href = "admin.html"; // Redirects to the admin panel
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    let videos = document.querySelectorAll(".theme-video");
+    let index = 0;
+
+    function showNextVideo() {
+        videos.forEach(video => video.style.display = "none"); // Hide all videos
+        videos[index].style.display = "block"; // Show the current video
+        videos[index].play(); // Ensure it plays
+
+        index = (index + 1) % videos.length; // Move to the next video
+    }
+
+    showNextVideo();
+    setInterval(showNextVideo, 5000); // Switch video every 5 seconds
+});
+
+function updateDateTime() {
+        let now = new Date();
+
+        let timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        let timeString = now.toLocaleTimeString(undefined, timeOptions);
+
+        let dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let dateString = now.toLocaleDateString(undefined, dateOptions);
+
+        document.getElementById("time").textContent = timeString;
+        document.getElementById("date").textContent = dateString;
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
 </script>
+
+
 
 </body>
 </html>
